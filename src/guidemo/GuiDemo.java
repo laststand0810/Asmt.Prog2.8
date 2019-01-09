@@ -46,14 +46,14 @@ public class GuiDemo extends JFrame {
         // Create the DrawPanel that fills most of the window, and customize it.
         drawPanel = new DrawPanel();
         drawPanel.getTextItem().setText(
-                "Big bugs have little bugs\n"
-                + "      Upon their backs to bite 'em,\n"
-                + "And little bugs have littler bugs,\n"
-                + "      And so it goes, ad infinitum."
+                "We keep moving forward, opening new doors,\n"
+                + "and doing new things, because we're curious\n"
+                + "and curiosity keeps leading us down new paths.\n"
+                + "Walt Disney\n"
         );
         drawPanel.getTextItem().setFontSize(36);
         drawPanel.getTextItem().setJustify(TextItem.LEFT);
-        drawPanel.setBackgroundImage(Util.getImageResource("resources/images/mandelbrot.jpeg"));
+        drawPanel.setBackgroundImage(Util.getImageResource("resources/images/1.jpeg"));
         content.add(drawPanel, BorderLayout.CENTER);
 
         // Add an icon toolbar to the SOUTH position of the layout
@@ -69,7 +69,6 @@ public class GuiDemo extends JFrame {
         menuBar.add(makeBackgroundMenu());
         menuBar.add(iconSupport.createMenu("Stamper"));
         setJMenuBar(menuBar);
-        
 
         // Set the size of the window and its position.
         pack();  // Size the window to fit its content.
@@ -109,11 +108,10 @@ public class GuiDemo extends JFrame {
      */
     private JMenu makeBackgroundMenu() {
         JMenu menu = new JMenu("Background");
-        menu.add(new ChooseBackgroundAction("Mandelbrot"));
-        menu.add(new ChooseBackgroundAction("Earthrise"));
-        menu.add(new ChooseBackgroundAction("Sunset"));
-        menu.add(new ChooseBackgroundAction("Cloud"));
-        menu.add(new ChooseBackgroundAction("Eagle_nebula"));
+        menu.add(new ChooseBackgroundAction("1"));
+        menu.add(new ChooseBackgroundAction("2"));
+        menu.add(new ChooseBackgroundAction("3"));
+        menu.add(new ChooseBackgroundAction("4"));
         menu.addSeparator();
         menu.add(new ChooseBackgroundAction("Custom..."));
         menu.addSeparator();
@@ -132,16 +130,14 @@ public class GuiDemo extends JFrame {
         });
         return menu;
     }
-    
-    private JToolBar makeBackGroundToolBar(boolean horizontal){
-        
-        
+
+    private JToolBar makeBackGroundToolBar(boolean horizontal) {
+
         JToolBar toolBar = new JToolBar(horizontal ? JToolBar.HORIZONTAL : JToolBar.VERTICAL);
-        toolBar.add(new ChooseBackgroundAction("Mandelbrot"));
-        toolBar.add(new ChooseBackgroundAction("Earthrise"));
-        toolBar.add(new ChooseBackgroundAction("Sunset"));
-        toolBar.add(new ChooseBackgroundAction("Cloud"));
-        toolBar.add(new ChooseBackgroundAction("Eagle_nebula"));
+        toolBar.add(new ChooseBackgroundAction("1"));
+        toolBar.add(new ChooseBackgroundAction("2"));
+        toolBar.add(new ChooseBackgroundAction("3"));
+        toolBar.add(new ChooseBackgroundAction("4"));
         toolBar.addSeparator(new Dimension(20, 0));
         toolBar.add(new ChooseBackgroundAction("Custom..."));
         toolBar.addSeparator();
@@ -223,7 +219,7 @@ public class GuiDemo extends JFrame {
                 g.fillRect(0, 0, 32, 32);
                 g.setColor(Color.magenta);
                 g.drawString("COL", 5, 20);
-                
+
                 g.dispose();
                 putValue(Action.SMALL_ICON, new ImageIcon(buff));
                 putValue(Action.SHORT_DESCRIPTION, "<html>Use a solid color for background<br>instead of an image.</html>");
