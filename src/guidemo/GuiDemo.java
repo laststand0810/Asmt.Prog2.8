@@ -1,5 +1,6 @@
 package guidemo;
 
+import com.sun.prism.j2d.J2DPipeline;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -58,7 +59,7 @@ public class GuiDemo extends JFrame {
         // Add an icon toolbar to the SOUTH position of the layout
         IconSupport iconSupport = new IconSupport(drawPanel);
         content.add(iconSupport.createToolbar(true), BorderLayout.SOUTH);
-
+        content.add(this.makeBackGroundToolBar(true), BorderLayout.NORTH);
         // Create the menu bar and add it to the frame.  The TextMenu is defined by
         // a separate class.  The other menus are created in this class.
         JMenuBar menuBar = new JMenuBar();
@@ -66,7 +67,9 @@ public class GuiDemo extends JFrame {
         textMenu = new TextMenu(drawPanel);
         menuBar.add(textMenu);
         menuBar.add(makeBackgroundMenu());
+        menuBar.add(iconSupport.createMenu("Stamper"));
         setJMenuBar(menuBar);
+        
 
         // Set the size of the window and its position.
         pack();  // Size the window to fit its content.
@@ -118,6 +121,7 @@ public class GuiDemo extends JFrame {
         menu.addSeparator();
         menu.add(gradientOverlayCheckbox);
         gradientOverlayCheckbox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 if (gradientOverlayCheckbox.isSelected()) {
                     drawPanel.setGradientOverlayColor(Color.WHITE);
@@ -127,6 +131,26 @@ public class GuiDemo extends JFrame {
             }
         });
         return menu;
+    }
+    
+    private JToolBar makeBackGroundToolBar(boolean horizontal){
+        
+        
+        JToolBar toolBar = new JToolBar(horizontal ? JToolBar.HORIZONTAL : JToolBar.VERTICAL);
+        toolBar.add(new ChooseBackgroundAction("Mandelbrot"));
+        toolBar.add(new ChooseBackgroundAction("Earthrise"));
+        toolBar.add(new ChooseBackgroundAction("Sunset"));
+        toolBar.add(new ChooseBackgroundAction("Cloud"));
+        toolBar.add(new ChooseBackgroundAction("Eagle_nebula"));
+        toolBar.addSeparator(new Dimension(20, 0));
+        toolBar.add(new ChooseBackgroundAction("Custom..."));
+        toolBar.addSeparator();
+        toolBar.add(new ChooseBackgroundAction("Color..."));
+        toolBar.addSeparator(new Dimension(20, 0));
+        toolBar.add(newPictureAction);
+        toolBar.add(saveImageAction);
+        toolBar.add(quitAction);
+        return toolBar;
     }
 
     private AbstractAction newPictureAction
@@ -140,6 +164,7 @@ public class GuiDemo extends JFrame {
 
     private AbstractAction quitAction
             = new AbstractAction("Quit", Util.iconFromResource("resources/action_icons/exit.png")) {
+        @Override
         public void actionPerformed(ActionEvent evt) {
             System.exit(0);
         }
@@ -147,6 +172,7 @@ public class GuiDemo extends JFrame {
 
     private AbstractAction saveImageAction
             = new AbstractAction("Save Image...", Util.iconFromResource("resources/action_icons/filesave.png")) {
+        @Override
         public void actionPerformed(ActionEvent evt) {
             File f = fileChooser.getOutputFile(drawPanel, "Select Ouput File", "saying.jpeg");
             if (f != null) {
@@ -191,8 +217,18 @@ public class GuiDemo extends JFrame {
                         Util.iconFromResource("resources/images/" + text.toLowerCase() + "_thumbnail.jpeg"));
             }
             if (text.equals("Color...")) {
+                BufferedImage buff = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+                Graphics g = buff.createGraphics();
+                g.setColor(Color.gray);
+                g.fillRect(0, 0, 32, 32);
+                g.setColor(Color.magenta);
+                g.drawString("COL", 5, 20);
+                
+                g.dispose();
+                putValue(Action.SMALL_ICON, new ImageIcon(buff));
                 putValue(Action.SHORT_DESCRIPTION, "<html>Use a solid color for background<br>instead of an image.</html>");
             } else if (text.equals("Custom...")) {
+                putValue(Action.SMALL_ICON, Util.iconFromResource("resources/action_icons/fileopen.png"));
                 putValue(Action.SHORT_DESCRIPTION, "<html>Select an image file<br>to use as the background.</html>");
             } else {
                 putValue(Action.SHORT_DESCRIPTION, "Use this image as the background.");
@@ -200,6 +236,7 @@ public class GuiDemo extends JFrame {
 
         }
 
+        @Override
         public void actionPerformed(ActionEvent evt) {
             if (text.equals("Custom...")) {
                 File inputFile = fileChooser.getInputFile(drawPanel, "Select Background Image");
